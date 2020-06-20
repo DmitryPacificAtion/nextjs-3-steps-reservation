@@ -25,3 +25,26 @@ img {
   max-width: 100%;
   display: block;
 }
+
+.root {
+  display: 'flex';
+  flex-flow: 'column nowrap';
+  align-items: 'center';
+  padding-top: 50px;
+  justify-content: 'center';
+  align-content: 'center';
+}
+
+.checkin {
+  margin-right: 25px;
+  margin-bottom: 20px;
+}
+
+.checkout {
+  margin-left: 25px;
+  margin-bottom: 20px;
+}
+
+.next {
+  width: 120px;
+}

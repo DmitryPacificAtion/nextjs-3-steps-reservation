@@ -1,44 +1,78 @@
-import Head from 'next/head'
-import Layout, { siteTitle } from '../components/layout'
-import utilStyles from '../styles/utils.module.css'
-import { getSortedPostsData } from '../lib/posts'
+import 'date-fns';
+import { makeStyles } from '@material-ui/core/styles';
+import Link from 'next/link';
+import Grid from '@material-ui/core/Grid';
+import DateFnsUtils from '@date-io/date-fns';
+import { MuiPickersUtilsProvider, KeyboardDateTimePicker } from '@material-ui/pickers';
+import { Button, Box } from '@material-ui/core';
+const useStyles = makeStyles({
+  root: {
+    display: 'flex',
+    flexFlow: 'column nowrap',
+    alignItems: 'center',
+    paddingTop: '50px',
+    justifyContent: 'center',
+    alignContent: 'center',
+  },
+  checkin: {
+    marginRight: '25px',
+    marginBottom: '20px',
+  },
+  checkout: {
+    marginLeft: '25px',
+    marginBottom: '20px',
+  },
+  next: {
+    width: '120px',
+  },
+});
 
-export async function getStaticProps() {
-  const allPostsData = getSortedPostsData()
-  return {
-    props: {
-      allPostsData
-    }
-  }
-}
+function Home() {
+  const [selectedDate, setSelectedDate] = React.useState(new Date());
+  const styles = useStyles()
+  const handleDateChange = (date) => {
+    setSelectedDate(date);
+  };
 
-export default function Home({ allPostsData }) {
   return (
-    <Layout home>
-      <Head>
-        <title>{siteTitle}</title>
-      </Head>
-      <section className={utilStyles.headingMd}>
-        <p>[Your Self Introduction]</p>
-        <p>
-          (This is a sample website - you’ll be building a site like this on{' '}
-          <a href="https://nextjs.org/learn">our Next.js tutorial</a>.)
-        </p>
-      </section>
-      <section className={`${utilStyles.headingMd} ${utilStyles.padding1px}`}>
-        <h2 className={utilStyles.headingLg}>Blog</h2>
-        <ul className={utilStyles.list}>
-          {allPostsData.map(({ id, date, title }) => (
-            <li className={utilStyles.listItem} key={id}>
-              {title}
-              <br />
-              {id}
-              <br />
-              {date}
-            </li>
-          ))}
-        </ul>
-      </section>
-    </Layout>
-  )
+    <MuiPickersUtilsProvider utils={DateFnsUtils}>
+      <Box className={styles.root}>
+        <Grid container justify="center">
+          <KeyboardDateTimePicker
+            variant="inline"
+            ampm={false}
+            className={styles.checkin}
+            margin="normal"
+            id="checkin-date-time"
+            label="Checkin"
+            value={selectedDate}
+            onChange={handleDateChange}
+            onError={console.log}
+            disablePast
+            format="MM/dd/yyyy HH:mm"
+          />
+          <KeyboardDateTimePicker
+            variant="inline"
+            ampm={false}
+            className={styles.checkout}
+            margin="normal"
+            id="checkout-date-time"
+            label="Checkout"
+            value={selectedDate}
+            onChange={handleDateChange}
+            onError={console.log}
+            disablePast
+            format="MM/dd/yyyy HH:mm"
+          />
+        </Grid>
+        <Link href="/pages/map">
+          <Button variant="contained" color="primary" type="button" className={styles.next}>
+            Next
+          </Button>
+        </Link>
+      </Box>
+    </MuiPickersUtilsProvider>
+  );
 }
+
+export default Home;
